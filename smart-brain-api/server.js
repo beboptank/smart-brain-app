@@ -1,26 +1,36 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const database = {
     users: [
         {
             id: '123',
             name: 'John',
-            email: 'john@gmail.com',
             password: 'cookies',
+            email: 'john@gmail.com',
             entries: 0,
             joined: new Date()
         },
         {
             id: '124',
             name: 'Sally',
-            email: 'sally@gmail.com',
             password: 'bananas',
+            email: 'sally@gmail.com',
             entries: 0,
             joined: new Date()
+        }
+    ],
+    login: [
+        {
+            id: '987',
+            hash: '',
+            email: 'john@gmail.com'
         }
     ]
 }
@@ -40,6 +50,13 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
+    const saltRounds = 10;
+    const myPlaintextPassword = 's0/\/\P4$$w0rD';
+    
+    bcrypt.hash(password, saltRounds).then(function (hash) {
+        console.log(hash);
+    });
+
     database.users.push({
         id: '125',
         name: name,
